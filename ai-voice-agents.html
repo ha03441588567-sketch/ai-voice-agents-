@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VoiceIQ – AI Voice Agents</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#080c14;
+  --surface:#0d1220;
+  --surface2:#111827;
+  --accent:#00d4ff;
+  --accent2:#7c3aed;
+  --gold:#f59e0b;
+  --text:#f1f5f9;
+  --muted:#64748b;
+  --border:rgba(0,212,255,0.12);
+  --green:#10b981;
+  --red:#ef4444;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,20,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.logo{font-size:1.25rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;}
+.logo span{color:var(--text);}
+.nav-cta{padding:0.5rem 1.25rem;background:var(--accent);color:#080c14;border:none;border-radius:8px;font-family:'Sora',sans-serif;font-weight:600;font-size:0.875rem;cursor:pointer;transition:opacity 0.2s;}
+.nav-cta:hover{opacity:0.85;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:6rem 1.5rem 4rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,0.08) 0%,transparent 70%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.4rem 1rem;background:rgba(0,212,255,0.08);border:1px solid var(--border);border-radius:999px;font-size:0.75rem;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:1.5rem;}
+.pulse{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:700;line-height:1.1;letter-spacing:-0.03em;margin-bottom:1.25rem;}
+.hero h1 .highlight{color:var(--accent);}
+.hero p{font-size:1.1rem;color:#94a3b8;max-width:560px;margin:0 auto 2.5rem;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-primary{padding:0.85rem 2rem;background:var(--accent);color:#080c14;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-weight:600;font-size:1rem;cursor:pointer;transition:all 0.2s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,0.3);}
+.btn-secondary{padding:0.85rem 2rem;background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.15);border-radius:10px;font-family:'Sora',sans-serif;font-weight:500;font-size:1rem;cursor:pointer;transition:all 0.2s;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+
+/* STATS */
+.stats{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;padding:2rem 1.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:0 2rem;}
+.stat{text-align:center;}
+.stat-num{font-size:2rem;font-weight:700;color:var(--accent);}
+.stat-label{font-size:0.8rem;color:var(--muted);margin-top:0.25rem;}
+
+/* SECTION */
+section{padding:5rem 1.5rem;max-width:1100px;margin:0 auto;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;}
+.section-title{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:1rem;}
+.section-sub{color:#94a3b8;font-size:1rem;max-width:520px;}
+
+/* INDUSTRIES */
+.industries-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-top:3rem;}
+.industry-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:all 0.25s;cursor:pointer;}
+.industry-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,212,255,0.1);}
+.industry-icon{font-size:2rem;margin-bottom:1rem;}
+.industry-name{font-weight:600;font-size:1rem;margin-bottom:0.5rem;}
+.industry-desc{font-size:0.85rem;color:var(--muted);line-height:1.5;}
+.industry-tag{display:inline-block;margin-top:0.75rem;padding:0.25rem 0.75rem;background:rgba(0,212,255,0.08);border:1px solid var(--border);border-radius:999px;font-size:0.7rem;color:var(--accent);font-family:'JetBrains Mono',monospace;}
+
+/* HOW IT WORKS */
+.how-wrap{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:3rem;margin-top:3rem;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;margin-top:2rem;}
+.step{text-align:center;}
+.step-num{width:48px;height:48px;background:rgba(0,212,255,0.1);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent);font-size:1.1rem;margin:0 auto 1rem;}
+.step-title{font-weight:600;font-size:0.95rem;margin-bottom:0.5rem;}
+.step-desc{font-size:0.82rem;color:var(--muted);}
+.step-arrow{display:none;}
+
+/* DEMO CALL */
+.demo-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem;margin-top:3rem;}
+.call-ui{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-top:1.5rem;max-width:480px;}
+.call-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.call-avatar{width:44px;height:44px;background:rgba(0,212,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;}
+.call-info{flex:1;}
+.call-name{font-weight:600;font-size:0.95rem;}
+.call-status{font-size:0.75rem;color:var(--green);display:flex;align-items:center;gap:4px;}
+.call-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;}
+.transcript{display:flex;flex-direction:column;gap:0.75rem;}
+.msg{display:flex;gap:0.75rem;align-items:flex-start;}
+.msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600;flex-shrink:0;}
+.msg-ai .msg-avatar{background:rgba(0,212,255,0.2);color:var(--accent);}
+.msg-human .msg-avatar{background:rgba(124,58,237,0.2);color:var(--accent2);}
+.msg-bubble{background:var(--surface2);border-radius:10px;padding:0.6rem 0.9rem;font-size:0.82rem;line-height:1.5;max-width:320px;}
+.msg-ai .msg-bubble{border-left:2px solid var(--accent);}
+.msg-human .msg-bubble{border-left:2px solid var(--accent2);}
+.typing{display:flex;gap:3px;align-items:center;padding:0.6rem 0.9rem;background:var(--surface2);border-radius:10px;width:fit-content;}
+.dot{width:5px;height:5px;background:var(--muted);border-radius:50%;animation:typing 1.2s infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,100%{opacity:0.3;transform:translateY(0);}50%{opacity:1;transform:translateY(-3px);}}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-top:3rem;}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;transition:all 0.25s;}
+.price-card.featured{border-color:var(--accent);position:relative;}
+.price-card.featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#080c14;font-size:0.7rem;font-weight:700;padding:0.25rem 0.9rem;border-radius:999px;}
+.price-name{font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;font-family:'JetBrains Mono',monospace;}
+.price-amount{font-size:2.5rem;font-weight:700;margin-bottom:0.25rem;}
+.price-amount span{font-size:1rem;font-weight:400;color:var(--muted);}
+.price-desc{font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;}
+.price-features li{font-size:0.85rem;display:flex;align-items:center;gap:0.5rem;}
+.price-features li::before{content:'✓';color:var(--green);font-weight:700;}
+.price-btn{width:100%;padding:0.75rem;border-radius:10px;font-family:'Sora',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;}
+.price-btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.price-btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.price-btn-filled{background:var(--accent);border:none;color:#080c14;}
+.price-btn-filled:hover{opacity:0.85;}
+
+/* CTA */
+.cta-section{text-align:center;padding:5rem 1.5rem;background:linear-gradient(180deg,transparent,rgba(0,212,255,0.04));}
+.cta-section h2{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;margin-bottom:1rem;}
+.cta-section p{color:#94a3b8;margin-bottom:2rem;}
+
+/* FOOTER */
+footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-size:0.8rem;color:var(--muted);}
+footer span{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Voice<span>IQ</span></div>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book Demo</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-badge"><div class="pulse"></div> AI-Powered Voice Agents — Live</div>
+    <h1>Your Business Runs<br><span class="highlight">24/7 On Autopilot</span></h1>
+    <p>AI Voice Agents that call customers, book appointments, and close deals — while you sleep.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Hear Live Demo</button>
+      <button class="btn-secondary" onclick="document.getElementById('industries').scrollIntoView({behavior:'smooth'})">See Industries</button>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Always Available</div></div>
+  <div class="stat"><div class="stat-num">3x</div><div class="stat-label">More Appointments</div></div>
+  <div class="stat"><div class="stat-num">80%</div><div class="stat-label">Cost Reduction</div></div>
+  <div class="stat"><div class="stat-num">&lt;2s</div><div class="stat-label">Response Time</div></div>
+</div>
+
+<!-- INDUSTRIES -->
+<section id="industries">
+  <div class="section-label">// Industries</div>
+  <h2 class="section-title">Built For Your Business</h2>
+  <p class="section-sub">AI Voice Agents customized for the highest-demand industries.</p>
+  <div class="industries-grid">
+    <div class="industry-card">
+      <div class="industry-icon">🏥</div>
+      <div class="industry-name">Clinics & Healthcare</div>
+      <div class="industry-desc">Book appointments, send reminders, handle patient queries, reduce no-shows by 60%.</div>
+      <div class="industry-tag">appointment-booking</div>
+    </div>
+    <div class="industry-card">
+      <div class="industry-icon">🛡️</div>
+      <div class="industry-name">Insurance</div>
+      <div class="industry-desc">Qualify leads, explain policies, schedule agent calls, follow up on renewals automatically.</div>
+      <div class="industry-tag">lead-qualification</div>
+    </div>
+    <div class="industry-card">
+      <div class="industry-icon">🏠</div>
+      <div class="industry-name">Real Estate</div>
+      <div class="industry-desc">Call new leads instantly, qualify buyers vs renters, book property viewings 24/7.</div>
+      <div class="industry-tag">instant-followup</div>
+    </div>
+    <div class="industry-card">
+      <div class="industry-icon">☀️</div>
+      <div class="industry-name">Solar Companies</div>
+      <div class="industry-desc">Outbound calling to warm leads, qualify homeowners, book site assessments automatically.</div>
+      <div class="industry-tag">outbound-calls</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="section-label">// How It Works</div>
+  <h2 class="section-title">One Setup. Forever Running.</h2>
+  <div class="how-wrap">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Lead Comes In</div>
+        <div class="step-desc">New form submission, website visit, or database upload triggers the agent.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">AI Calls Instantly</div>
+        <div class="step-desc">Agent calls within seconds, speaks naturally in human-like voice.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Qualifies & Books</div>
+        <div class="step-desc">Asks qualifying questions, handles objections, books the appointment.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">CRM Updated</div>
+        <div class="step-desc">Call summary, recording, and next steps auto-logged to your CRM.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO CALL -->
+<section id="demo">
+  <div class="section-label">// Live Demo</div>
+  <h2 class="section-title">Hear The AI In Action</h2>
+  <p class="section-sub">Real conversation between AI Voice Agent and a clinic patient.</p>
+  <div class="demo-section">
+    <div class="call-ui">
+      <div class="call-header">
+        <div class="call-avatar">🤖</div>
+        <div class="call-info">
+          <div class="call-name">VoiceIQ Agent — City Clinic</div>
+          <div class="call-status"><div class="call-dot"></div> Live Call Simulation</div>
+        </div>
+      </div>
+      <div class="transcript" id="transcript"></div>
+    </div>
+    <button class="btn-primary" style="margin-top:1.5rem;" onclick="startDemo()">▶ Play Demo Conversation</button>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">// Pricing</div>
+  <h2 class="section-title">Simple, Honest Pricing</h2>
+  <p class="section-sub">No hidden fees. Cancel anytime.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">STARTER</div>
+      <div class="price-amount">$300<span>/project</span></div>
+      <div class="price-desc">Perfect for small clinics or single-location businesses.</div>
+      <ul class="price-features">
+        <li>1 AI Voice Agent</li>
+        <li>Appointment Booking</li>
+        <li>500 calls/month</li>
+        <li>Basic CRM integration</li>
+        <li>WhatsApp support</li>
+      </ul>
+      <button class="price-btn price-btn-outline">Get Started</button>
+    </div>
+    <div class="price-card featured">
+      <div class="price-name">GROWTH</div>
+      <div class="price-amount">$700<span>/project</span></div>
+      <div class="price-desc">For real estate, insurance, and solar teams scaling fast.</div>
+      <ul class="price-features">
+        <li>3 AI Voice Agents</li>
+        <li>Outbound + Inbound calls</li>
+        <li>2,000 calls/month</li>
+        <li>Full CRM integration</li>
+        <li>Lead scoring & qualification</li>
+        <li>Call recordings & summaries</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="price-btn price-btn-filled">Most Popular</button>
+    </div>
+    <div class="price-card">
+      <div class="price-name">ENTERPRISE</div>
+      <div class="price-amount">Custom</div>
+      <div class="price-desc">Full deployment for large teams and multi-location businesses.</div>
+      <ul class="price-features">
+        <li>Unlimited agents</li>
+        <li>Custom voice & personality</li>
+        <li>Unlimited calls</li>
+        <li>Multi-language support</li>
+        <li>Dedicated success manager</li>
+        <li>White-label option</li>
+      </ul>
+      <button class="price-btn price-btn-outline">Contact Us</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="contact">
+  <h2>Ready To Automate Your Calls?</h2>
+  <p>Join businesses saving 80% on customer outreach costs.</p>
+  <button class="btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem;">Book a Free Demo Call</button>
+</div>
+
+<footer>
+  Built by <span>Karam Hussain</span> · AI Voice Agent Systems · 2026
+</footer>
+
+<script>
+const conversation = [
+  {role:'ai', text:'Hello! This is Sara from City Clinic. Am I speaking with Ahmed?'},
+  {role:'human', text:'Yes, this is Ahmed. Who is this?'},
+  {role:'ai', text:'Hi Ahmed! I\'m an AI assistant from City Clinic. You requested information about our cardiology department. Do you have 2 minutes?'},
+  {role:'human', text:'Sure, go ahead.'},
+  {role:'ai', text:'Great! Dr. Hassan has availability this Thursday at 10 AM or Friday at 2 PM. Which works better for you?'},
+  {role:'human', text:'Thursday at 10 AM sounds good.'},
+  {role:'ai', text:'Perfect! I\'ve booked you with Dr. Hassan on Thursday at 10 AM. You\'ll receive a confirmation SMS shortly. Is there anything else I can help with?'},
+  {role:'human', text:'No that\'s all, thank you!'},
+  {role:'ai', text:'Thank you Ahmed! See you Thursday. Have a great day! Goodbye.'},
+];
+
+let demoRunning = false;
+
+async function startDemo() {
+  if(demoRunning) return;
+  demoRunning = true;
+  const t = document.getElementById('transcript');
+  t.innerHTML = '';
+  for(let i = 0; i < conversation.length; i++){
+    const m = conversation[i];
+    await new Promise(r => setTimeout(r, i === 0 ? 300 : 1800));
+    const typing = document.createElement('div');
+    typing.className = 'msg msg-ai';
+    typing.innerHTML = `<div class="msg-avatar">${m.role==='ai'?'AI':'👤'}</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    t.appendChild(typing);
+    t.scrollTop = t.scrollHeight;
+    await new Promise(r => setTimeout(r, 900));
+    typing.remove();
+    const msg = document.createElement('div');
+    msg.className = `msg msg-${m.role}`;
+    msg.innerHTML = `<div class="msg-avatar">${m.role==='ai'?'AI':'👤'}</div><div class="msg-bubble">${m.text}</div>`;
+    t.appendChild(msg);
+    t.scrollTop = t.scrollHeight;
+  }
+  demoRunning = false;
+}
+</script>
+</body>
+</html>
